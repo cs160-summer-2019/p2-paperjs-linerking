@@ -72,14 +72,36 @@
 			// your custom interaction goes here!
 			// you may replace everything
 			function myCustomInteraction() {
-				var tool = new paper.Tool();
+        
+        var size = new paper.Size(200,100);
+        var square = new paper.Rectangle(size);
+        square.center = paper.view.center;
+        var path = new paper.Path.Rectangle(square);
+        path.fillColor = "red";
+        
 
-				tool.onMouseDown = function (event) {
-				    var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
-				    if (hit) {
-				        hit.item.fillColor = cp.history[cp.history.length - 1];
-				    }
+        
+        var start;
+        var end;
+        
+        
+				path.onMouseDown = function (event) {
+          start = event.point;
 				}
+				path.onMouseUp = function (event) {
+          end = event.point;
+        
+          if (cp.history.length>=2) {
+            path.fillColor = {
+              gradient: {
+                stops: [cp.history[cp.history.length-2], cp.history[cp.history.length-1]]
+              },
+              origin: start,
+              destination: end
+            };
+          }
+				}
+
 			}
 
 
